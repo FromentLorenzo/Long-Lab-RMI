@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class Candidate extends UnicastRemoteObject implements Serializable {
+public class Candidate implements Serializable {
     int rank;
     String firstName;
     String lastName;
@@ -42,6 +42,10 @@ public class Candidate extends UnicastRemoteObject implements Serializable {
 
     @Override
     public String toString() {
-        return this.firstName + this.lastName + " at rank : " + this.rank;
+        return "Candidate{" +
+                "rank=" + rank +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

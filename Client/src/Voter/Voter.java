@@ -14,9 +14,9 @@ public class Voter {
 
     public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
         DistantPublic publicServer = (DistantPublic) Naming.lookup("rmi://localhost:2001/PublicServer");
-        List<Candidate> candidateList = (List<Candidate>) publicServer.getCandidates();
-        for (int i = 0; i < candidateList.size(); i++) {
-            System.out.println(candidateList.get(i).toString());
+        List<Candidate> candidateList = publicServer.getCandidates();
+        for (Candidate candidate : candidateList) {
+            System.out.println(candidate);
         }
     }
 }
