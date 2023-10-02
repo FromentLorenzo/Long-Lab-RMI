@@ -1,14 +1,15 @@
 package Contract;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
-public class Candidates extends UnicastRemoteObject {
+public class Candidate extends UnicastRemoteObject implements Serializable {
     int rank;
     String firstName;
     String lastName;
 
-    public Candidates(int rank, String firstName, String lastName) throws RemoteException {
+    public Candidate(int rank, String firstName, String lastName) throws RemoteException {
         super();
         this.rank = rank;
         this.firstName = firstName;
@@ -37,5 +38,10 @@ public class Candidates extends UnicastRemoteObject {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return this.firstName + this.lastName + " at rank : " + this.rank;
     }
 }
