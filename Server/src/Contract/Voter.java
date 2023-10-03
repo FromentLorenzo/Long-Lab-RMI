@@ -1,6 +1,7 @@
 package Contract;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Voter implements Serializable {
 
@@ -13,5 +14,11 @@ public class Voter implements Serializable {
         this.password = password;
     }
 
+    public int getStudentNumber() {
+        return studentNumber;
+    }
 
+    public boolean matchPassword(String password) {
+        return Objects.equals(this.password, password);
+    }
 }

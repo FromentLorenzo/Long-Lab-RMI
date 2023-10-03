@@ -12,4 +12,11 @@ public class VoteMaterial implements Serializable {
         this.OTP = OTP;
     }
 
+    public DistantPrivate getStubPrivate() {
+        return stubPrivate;
+    }
+
+    public String getOTP() {
+        return OTP;
+    }
 }

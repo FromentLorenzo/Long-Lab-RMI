@@ -1,4 +1,5 @@
 package Contract;
 
-public interface DistantPrivate extends java.rmi.Remote {
+public interface DistantPrivate {
+    public void echo();
 }

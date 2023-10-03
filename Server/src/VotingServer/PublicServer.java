@@ -15,6 +15,8 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
     ArrayList<Candidate> candidateList;
     ArrayList<Voter> voterList;
 
+    PrivateServer privateServer;
+
 
 
     protected PublicServer(int port) throws RemoteException {
@@ -32,6 +34,8 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
         voterList.add(new Voter(5, "E"));
         voterList.add(new Voter(6, "F"));
         voterList.add(new Voter(7, "G"));
+
+        privateServer = new PrivateServer(port+1);
     }
 
     @Override
@@ -41,8 +45,13 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
 
     @Override
     public VoteMaterial getVoteMaterial(int studentNumber) throws RemoteException {
-        //return new VoteMaterial();
-        //TODO: check if studentNumber is in voterList and PASSWORD
+        for (Voter voter : voterList) {
+            if (voter.getStudentNumber() == studentNumber) {
+                //TODO : trouver un moyen de générer le mot passe temporaire
+                return new VoteMaterial(this.privateServer, "motDePasseTemp");
+            }
+        }
+        return null;
     }
 
 
