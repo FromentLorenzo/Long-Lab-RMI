@@ -29,6 +29,7 @@ public class Main {
         }
         System.out.println("Authentification réussie");
         System.out.println("Voici votre mot de passe temporaire : " + voteMaterial.getOTP());
+        System.out.println("Voici le mot de passe temporaire de 1 : " + publicServer.getOTPForStudent(1) );
         DistantPrivate privateServer = (DistantPrivate) voteMaterial.getStubPrivate();
         privateServer.echo();
     }
