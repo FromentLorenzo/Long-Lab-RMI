@@ -1,5 +1,7 @@
 package Contract;
 
-public interface DistantPrivate {
-    public void echo();
+import java.rmi.RemoteException;
+
+public interface DistantPrivate extends java.rmi.Remote {
+    public void echo() throws RemoteException;
 }

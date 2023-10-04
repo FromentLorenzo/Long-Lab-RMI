@@ -1,0 +1,6 @@
+
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(φΡ¶8―²‘ό®1
+
+java:S1130"vRemove the declaration of thrown exception 'java.rmi.RemoteException', as it cannot be thrown from constructor's body.(€ήΪ‘ωÿÿÿÿ8Γθύ®1
+b
+java:S1128"@Remove this unused import 'java.rmi.server.UnicastRemoteObject'.(κάϋÿÿÿÿ8Λθύ®1

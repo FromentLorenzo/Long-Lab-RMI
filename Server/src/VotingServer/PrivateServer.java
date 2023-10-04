@@ -7,8 +7,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class PrivateServer extends UnicastRemoteObject implements DistantPrivate, Serializable {
-    protected PrivateServer(int port) throws RemoteException {
-        super(port);
+    protected PrivateServer() throws RemoteException {
+        super();
     }
 
     public void echo() {

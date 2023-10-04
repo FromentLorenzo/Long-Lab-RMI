@@ -35,7 +35,7 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
         voterList.add(new Voter(6, "F"));
         voterList.add(new Voter(7, "G"));
 
-        privateServer = new PrivateServer(port+1);
+        privateServer = new PrivateServer();
     }
 
     @Override
