@@ -21,4 +21,21 @@ public class Voter implements Serializable {
     public boolean matchPassword(String password) {
         return Objects.equals(this.password, password);
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Voter voter = (Voter) o;
+        return studentNumber == voter.studentNumber && Objects.equals(password, voter.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(studentNumber, password);
+    }
 }

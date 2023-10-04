@@ -44,10 +44,11 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
     }
 
     @Override
-    public VoteMaterial getVoteMaterial(int studentNumber) throws RemoteException {
-        for (Voter voter : voterList) {
-            if (voter.getStudentNumber() == studentNumber) {
-                //TODO : trouver un moyen de générer le mot passe temporaire
+    public VoteMaterial getVoteMaterial(Voter voter) throws RemoteException {
+        System.out.println("Vote material called by : " + voter.getStudentNumber());
+        for (Voter voterIndex : voterList) {
+            if (voterIndex.equals(voter)) {
+                //connexion au voter avec demande du mot de passe mais bon dans le .equals on vérifie quand meme le mot de passe.
                 return new VoteMaterial(this.privateServer, "motDePasseTemp");
             }
         }
