@@ -18,6 +18,7 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
 
     ArrayList<Voter> voterList;
 
+
     PrivateServer privateServer;
 
     protected PublicServer(int port) throws RemoteException {
@@ -34,7 +35,7 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
         voterList.add(new Voter(5, "E"));
         voterList.add(new Voter(6, "F"));
         voterList.add(new Voter(7, "G"));
-
+        privateServer.getVoterList(voterList);
 
 
 
@@ -62,6 +63,18 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean checkCanVote(int studentNumber) throws RemoteException{
+        ArrayList<Voter> hasNotVotedList=privateServer.getHasNotVotedList();
+        for(Voter voter:hasNotVotedList){
+            if (voter.getStudentNumber()==studentNumber){
+                return true;
+            }
+
+        }
+        return false;
     }
 
     private String generateOTP(int studentNumber) {

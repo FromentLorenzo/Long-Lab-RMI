@@ -6,10 +6,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -18,6 +15,7 @@ public class Main {
         DistantPublic publicServer = (DistantPublic) Naming.lookup("rmi://localhost:2001/PublicServer");
         DistantPrivate privateServer = null;
         VoteMaterial voteMaterial = null;
+        Voter voter= null;
 
         System.out.println("Voici la liste des candidats : ");
         List<Candidate> candidateList = publicServer.getCandidates();
@@ -33,6 +31,11 @@ public class Main {
 
             try {
                 studentNumber = Integer.parseInt(scanner.nextLine());
+                if(!(publicServer.checkCanVote(studentNumber))){
+                    System.out.println("Vous avez déjà voté ou ne pouvez pas voter");
+                    return;
+                }
+
             } catch (NumberFormatException e) {
                 System.out.println("Erreur : Veuillez entrer un numéro d'étudiant valide (entier).");
                 continue; // Redemande le numéro d'étudiant s'il n'est pas valide
@@ -40,7 +43,7 @@ public class Main {
 
             System.out.println("Veuillez entrer votre mot de passe : ");
             String password = scanner.nextLine();
-            Voter voter = new Voter(studentNumber, password);
+            voter = new Voter(studentNumber, password);
             voteMaterial = publicServer.getVoteMaterial(voter);
 
             if (voteMaterial == null) {
@@ -70,8 +73,10 @@ public class Main {
             }
             voteMap.put(candidate.getRank(), points);
         }
-
-        privateServer.vote(voteMap);
-
+        if (privateServer.vote(voteMap,voter.getStudentNumber(),voteMaterial.getOTP())){
+            System.out.println("Votre vote a bien été pris en compte");
+        }else{
+            System.out.println("Erreur lors de l'envoi du vote");
+        }
     }
 }

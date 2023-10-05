@@ -2,6 +2,7 @@ package VotingServer;
 
 import Contract.Candidate;
 import Contract.DistantPrivate;
+import Contract.Voter;
 
 import java.io.Serializable;
 import java.net.Inet4Address;
@@ -16,12 +17,14 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
     private ArrayList<Candidate> candidateList;
     private Map<Integer, String> temporaryPasswords;
     private Map <Integer, Integer> totalVote;
+    private ArrayList<Voter> hasNotVotedList;
 
     protected PrivateServer() throws RemoteException {
         super();
         candidateList = new ArrayList<>();
         temporaryPasswords = new HashMap<>();
         totalVote = new HashMap<>();
+        hasNotVotedList = new ArrayList<>();
 
 
         candidateList.add(new Candidate(1, "Jean", "Patate"));
@@ -40,8 +43,20 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
     }
 
     @Override
-    public boolean vote(Map<Integer, Integer> voteMap) throws RemoteException {
+    public boolean vote(Map<Integer, Integer> voteMap,int studentNumber, String otp) throws RemoteException {
         System.out.println("New vote recieved");
+        System.out.println("Checking if voter can vote");
+        boolean canVote = false;
+        for(Voter voter: hasNotVotedList){
+            if((voter.getStudentNumber() == studentNumber)){
+                canVote = true;
+                break;
+            }
+        }
+        if(!canVote){
+            System.out.println("Voter cannot vote");
+            return false;
+        }
         if (voteMap.size() == totalVote.size()) {   //vérifie que la map envoyée a autant d'entrées que de candidats
             System.out.println("Checking if it is correct");
             for (Map.Entry<Integer, Integer> entry : voteMap.entrySet()) {
@@ -58,6 +73,12 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
                 int key = entry.getKey();
 
                 totalVote.put(key, totalVote.get(key) + voteMap.get(key));
+                for (Voter voter: hasNotVotedList){
+                    if(voter.getStudentNumber() == studentNumber){
+                        hasNotVotedList.remove(voter);
+                        break;
+                    }
+                }
             }
             System.out.println("total = \n" + totalVote);
             return true;
@@ -79,5 +100,15 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
 
     public void setCandidateList(ArrayList<Candidate> candidateList) {
         this.candidateList = candidateList;
+    }
+
+    public void getVoterList(ArrayList<Voter> voterList) {
+        hasNotVotedList = voterList;
+        for(Voter voter: hasNotVotedList){
+            System.out.println(voter.getStudentNumber());
+        }
+    }
+    public ArrayList<Voter> getHasNotVotedList() {
+        return hasNotVotedList;
     }
 }
