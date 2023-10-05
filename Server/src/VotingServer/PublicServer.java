@@ -30,11 +30,11 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
         voterList = new ArrayList<>();
         voterList.add(new Voter(1, "A"));
         voterList.add(new Voter(2, "B"));
-        voterList.add(new Voter(3, "C"));
+        /*voterList.add(new Voter(3, "C"));
         voterList.add(new Voter(4, "D"));
         voterList.add(new Voter(5, "E"));
         voterList.add(new Voter(6, "F"));
-        voterList.add(new Voter(7, "G"));
+        voterList.add(new Voter(7, "G"));*/
         privateServer.getVoterList(voterList);
 
 
@@ -94,6 +94,11 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
         }
 
         return password.toString();
+    }
+
+    @Override
+    public Map<Candidate, Integer> getWinners() throws RemoteException{
+        return privateServer.getWinners();
     }
 
 }

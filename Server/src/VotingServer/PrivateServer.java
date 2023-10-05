@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PrivateServer extends UnicastRemoteObject implements DistantPrivate, Serializable {
@@ -18,6 +19,7 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
     private Map<Integer, String> temporaryPasswords;
     private Map <Integer, Integer> totalVote;
     private ArrayList<Voter> hasNotVotedList;
+    private Boolean isVoteFinished = false;
 
     protected PrivateServer() throws RemoteException {
         super();
@@ -73,13 +75,19 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
                 int key = entry.getKey();
 
                 totalVote.put(key, totalVote.get(key) + voteMap.get(key));
+            }
                 for (Voter voter: hasNotVotedList){
                     if(voter.getStudentNumber() == studentNumber){
                         hasNotVotedList.remove(voter);
+                        if(hasNotVotedList.size() == 0){
+                            isVoteFinished = true;
+                            System.out.println("Vote is finished");
+                            System.out.println("Total vote : \n" + totalVote);
+                            return true;
+                        }
                         break;
                     }
                 }
-            }
             System.out.println("total = \n" + totalVote);
             return true;
         }
@@ -110,5 +118,22 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
     }
     public ArrayList<Voter> getHasNotVotedList() {
         return hasNotVotedList;
+    }
+
+    public Map<Candidate, Integer> getWinners() {
+        if (isVoteFinished) {
+            Map<Candidate, Integer> winners = new HashMap<>();
+            for (Map.Entry<Integer, Integer> entry : totalVote.entrySet()) {
+                int key = entry.getKey();
+                int value = entry.getValue();
+                for (Candidate candidate : candidateList) {
+                    if (candidate.getRank() == key) {
+                        winners.put(candidate, value);
+                    }
+                }
+            }
+            return winners;
+        }
+        return null;
     }
 }

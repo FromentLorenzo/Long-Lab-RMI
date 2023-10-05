@@ -59,8 +59,6 @@ public class Main {
 
         System.out.println("Authentification réussie");
 
-        //TODO envoyer l'otp et gérer la possibilité de voter cote server
-
         Map<Integer, Integer> voteMap = new HashMap<>();
         for (Candidate candidate : candidateList) {
             boolean voteIsValid = false;
@@ -78,5 +76,34 @@ public class Main {
         }else{
             System.out.println("Erreur lors de l'envoi du vote");
         }
+
+        Map<Candidate, Integer> winners = publicServer.getWinners();
+        try {
+            Thread.sleep(5000);
+
+        } catch (InterruptedException e) {
+        }
+
+        if (winners == null) {
+            System.out.println("Les votes ne sont pas encore finis");
+            return;
+        }
+        displayOfWinners(winners);
+
+
     }
+
+    private static void displayOfWinners(Map<Candidate, Integer> winners) {
+        if (winners.isEmpty()) {
+            System.out.println("Aucun gagnant n'a été déterminé.");
+        } else {
+            System.out.println("Voici les résultats :");
+            for (Map.Entry<Candidate, Integer> entry : winners.entrySet()) {
+                Candidate candidate = entry.getKey();
+                int voteCount = entry.getValue();
+                System.out.println(candidate.getFirstName() + " - Nombre de points : " + voteCount);
+            }
+        }
+    }
+
 }
