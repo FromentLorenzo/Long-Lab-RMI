@@ -3,6 +3,8 @@ package Contract;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Candidate implements Serializable {
     int rank;
@@ -35,6 +37,7 @@ public class Candidate implements Serializable {
     public String getLastName() {
         return lastName;
     }
+
 
     public void setLastName(String lastName) {
         this.lastName = lastName;

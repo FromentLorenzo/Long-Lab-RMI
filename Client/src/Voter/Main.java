@@ -32,8 +32,7 @@ public class Main {
             try {
                 studentNumber = Integer.parseInt(scanner.nextLine());
                 if(!(publicServer.checkCanVote(studentNumber))){
-                    System.out.println("Vous avez déjà voté ou ne pouvez pas voter");
-                    return;
+
                 }
 
             } catch (NumberFormatException e) {
@@ -69,6 +68,7 @@ public class Main {
                 if (points >=0 && points <=3)
                     voteIsValid = true;
             }
+            voter.vote(candidate.getRank(), points);
             voteMap.put(candidate.getRank(), points);
         }
         if (privateServer.vote(voteMap,voter.getStudentNumber(),voteMaterial.getOTP())){

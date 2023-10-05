@@ -53,6 +53,14 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
             if((voter.getStudentNumber() == studentNumber)){
                 canVote = true;
                 break;
+            }else{
+                Map<Integer,Integer> scoreToSubstract= voter.getVoteMap();
+                for (Map.Entry<Integer, Integer> entry : scoreToSubstract.entrySet()) {
+                    int key = entry.getKey();
+                    int value = entry.getValue();
+                    totalVote.put(key, totalVote.get(key) - value);
+                }
+                canVote= true;
             }
         }
         if(!canVote){

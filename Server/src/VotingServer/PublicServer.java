@@ -16,6 +16,7 @@ import java.util.Map;
 public class PublicServer extends UnicastRemoteObject implements DistantPublic {
 
 
+
     ArrayList<Voter> voterList;
 
 
@@ -67,8 +68,7 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
 
     @Override
     public boolean checkCanVote(int studentNumber) throws RemoteException{
-        ArrayList<Voter> hasNotVotedList=privateServer.getHasNotVotedList();
-        for(Voter voter:hasNotVotedList){
+        for(Voter voter:voterList){
             if (voter.getStudentNumber()==studentNumber){
                 return true;
             }
