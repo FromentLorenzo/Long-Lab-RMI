@@ -81,8 +81,5 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
 
         return password.toString();
     }
-    @Override
-    public String getOTPForStudent(int studentNumber) {
-        return temporaryPasswords.get(studentNumber);
-    }
+
 }
