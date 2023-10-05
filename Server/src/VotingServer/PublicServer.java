@@ -15,18 +15,16 @@ import java.util.Map;
 
 public class PublicServer extends UnicastRemoteObject implements DistantPublic {
 
-    ArrayList<Candidate> candidateList;
+
     ArrayList<Voter> voterList;
-    Map<Integer, String> temporaryPasswords;
 
     PrivateServer privateServer;
 
     protected PublicServer(int port) throws RemoteException {
         super(port);
-        candidateList = new ArrayList<>();
-        candidateList.add(new Candidate(1, "Jean", "Patate"));
-        candidateList.add(new Candidate(2, "Jean2", "Patate"));
-        candidateList.add(new Candidate(3, "Jean3", "Patate"));
+        privateServer = new PrivateServer();
+
+
 
         voterList = new ArrayList<>();
         voterList.add(new Voter(1, "A"));
@@ -37,14 +35,14 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
         voterList.add(new Voter(6, "F"));
         voterList.add(new Voter(7, "G"));
 
-        temporaryPasswords = new HashMap<>(); // Initialisation de la Map
 
-        privateServer = new PrivateServer();
+
+
     }
 
     @Override
     public List<Candidate> getCandidates() throws RemoteException {
-        return this.candidateList;
+        return privateServer.getCandidateList();
     }
 
     @Override
@@ -55,7 +53,10 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
                 String OTP = generateOTP(voter.getStudentNumber());
 
                 // Associer le mot de passe temporaire à l'étudiant dans la Map
-                temporaryPasswords.put(voter.getStudentNumber(), OTP);
+                Map<Integer, String> tempPassword = privateServer.getTemporaryPasswords();
+                tempPassword.put(voter.getStudentNumber(), OTP);
+                privateServer.setTemporaryPasswords(tempPassword);
+
 
                 return new VoteMaterial(this.privateServer, OTP);
             }
