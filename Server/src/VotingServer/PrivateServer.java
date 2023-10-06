@@ -110,7 +110,7 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
         this.candidateList = candidateList;
     }
 
-    public void getVoterList(ArrayList<Voter> voterList) {
+    public void copyVoterList(ArrayList<Voter> voterList) {
         hasNotVotedList = voterList;
         for(Voter voter: hasNotVotedList){
             System.out.println(voter.getStudentNumber());
