@@ -57,18 +57,32 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
         }
         if(!canVote){   // if user cannot vote, checks if user already voted
             if (personalVotes.containsKey(studentNumber)) {
-                System.out.println("voter already voted, changing its vote");
-                System.out.println("Adding \n" + totalVote + "\n" + voteMap);
-                System.out.println("Removing \n" + personalVotes.get(studentNumber));
-                for (Map.Entry<Integer, Integer> entry : voteMap.entrySet()) {
-                    int key = entry.getKey();
+                if (voteMap.size() == totalVote.size()) {   //vérifie que la map envoyée a autant d'entrées que de candidats
+                    System.out.println("Checking if it is correct");
+                    for (Map.Entry<Integer, Integer> entry : voteMap.entrySet()) {
+                        int key = entry.getKey();
+                        int value = entry.getValue();
 
-                    totalVote.put(key, totalVote.get(key) + voteMap.get(key) - personalVotes.get(studentNumber).get(key));
+                        if (!(value >= 0 && value <= 3)) {
+                            System.out.println("Vote recieved is not correct \n" + voteMap);
+                            return false;
+                        }
+                    }
 
+
+                    System.out.println("voter already voted, changing its vote");
+                    System.out.println("Adding \n" + totalVote + "\n" + voteMap);
+                    System.out.println("Removing \n" + personalVotes.get(studentNumber));
+                    for (Map.Entry<Integer, Integer> entry : voteMap.entrySet()) {
+                        int key = entry.getKey();
+
+                        totalVote.put(key, totalVote.get(key) + voteMap.get(key) - personalVotes.get(studentNumber).get(key));
+
+                    }
+                    System.out.println("Total : \n" + totalVote);
+                    personalVotes.put(studentNumber, voteMap);  //replaces personnal vote with new vote
+                    return true;
                 }
-                System.out.println("Total : \n" + totalVote);
-                personalVotes.put(studentNumber, voteMap);  //replaces personnal vote with new vote
-                return true;
             }
             System.out.println("Voter cannot vote");
             return false;
