@@ -89,7 +89,7 @@ public class Main {
             for (Map.Entry<Candidate, Integer> entry : winners.entrySet()) {
                 Candidate candidate = entry.getKey();
                 int voteCount = entry.getValue();
-                System.out.println(candidate.getFirstName() + candidate.getLastName() + " - Nombre de points : " + voteCount);
+                System.out.println(candidate.getFirstName() + " " + candidate.getLastName() + " - Nombre de points : " + voteCount);
             }
         }
     }
