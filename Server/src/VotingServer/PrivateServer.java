@@ -30,8 +30,8 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
 
 
         candidateList.add(new Candidate(1, "Jean", "Patate"));
-        candidateList.add(new Candidate(2, "Jean2", "Patate"));
-        candidateList.add(new Candidate(3, "Jean3", "Patate"));
+        candidateList.add(new Candidate(2, "Jeanne", "Pomme"));
+        candidateList.add(new Candidate(3, "Jacques", "Pomme-de-Terre"));
 
         for (Candidate candidate : candidateList) {
             totalVote.put(candidate.getRank(), 0);
@@ -47,6 +47,10 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
     @Override
     public boolean vote(Map<Integer, Integer> voteMap,int studentNumber, String otp) throws RemoteException {
         System.out.println("New vote recieved");
+        if (isVoteFinished) {
+            System.out.println("vote cannot be taken into account");
+            return false;
+        }
         System.out.println("Checking if voter can vote");
         boolean canVote = false;
         for(Voter voter: hasNotVotedList){
