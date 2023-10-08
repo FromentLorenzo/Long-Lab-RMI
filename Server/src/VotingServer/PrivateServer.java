@@ -40,7 +40,6 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
     }
 
     public void echo() {
-        System.out.println("patate");
         System.out.println(temporaryPasswords);
     }
 
@@ -153,9 +152,7 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
         for (Voter voter : voterList) {
             hasNotVotedList.add(voter);
         }
-        for(Voter voter: hasNotVotedList){
-            System.out.println(voter.getStudentNumber());
-        }
+
     }
     public ArrayList<Voter> getHasNotVotedList() {
         return hasNotVotedList;
