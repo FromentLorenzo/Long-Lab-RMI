@@ -5,12 +5,10 @@ import Contract.DistantPrivate;
 import Contract.Voter;
 
 import java.io.Serializable;
-import java.net.Inet4Address;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class PrivateServer extends UnicastRemoteObject implements DistantPrivate, Serializable {
@@ -18,6 +16,7 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
     private ArrayList<Candidate> candidateList;
     private Map<Integer, String> temporaryPasswords;
     private Map <Integer, Integer> totalVote;
+    private Map <Integer, Map<Integer, Integer>> personalVotes;
     private ArrayList<Voter> hasNotVotedList;
     private Boolean isVoteFinished = false;
 
@@ -27,11 +26,12 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
         temporaryPasswords = new HashMap<>();
         totalVote = new HashMap<>();
         hasNotVotedList = new ArrayList<>();
+        personalVotes = new HashMap<>();
 
 
         candidateList.add(new Candidate(1, "Jean", "Patate"));
-        candidateList.add(new Candidate(2, "Jean2", "Patate"));
-        candidateList.add(new Candidate(3, "Jean3", "Patate"));
+        candidateList.add(new Candidate(2, "Jeanne", "Pomme"));
+        candidateList.add(new Candidate(3, "Jacques", "Pomme-de-Terre"));
 
         for (Candidate candidate : candidateList) {
             totalVote.put(candidate.getRank(), 0);
@@ -47,18 +47,52 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
     @Override
     public boolean vote(Map<Integer, Integer> voteMap,int studentNumber, String otp) throws RemoteException {
         System.out.println("New vote recieved");
+        if (isVoteFinished) {
+            System.out.println("vote cannot be taken into account");
+            return false;
+        }
         System.out.println("Checking if voter can vote");
         boolean canVote = false;
         for(Voter voter: hasNotVotedList){
-            if((voter.getStudentNumber() == studentNumber)){
+            if((voter.getStudentNumber() == studentNumber)){    //if voter can vote
                 canVote = true;
                 break;
             }
         }
-        if(!canVote){
+        if(!canVote){   // if user cannot vote, checks if user already voted
+            if (personalVotes.containsKey(studentNumber)) {
+                if (voteMap.size() == totalVote.size()) {   //vérifie que la map envoyée a autant d'entrées que de candidats
+                    System.out.println("Checking if it is correct");
+                    for (Map.Entry<Integer, Integer> entry : voteMap.entrySet()) {
+                        int key = entry.getKey();
+                        int value = entry.getValue();
+
+                        if (!(value >= 0 && value <= 3)) {
+                            System.out.println("Vote recieved is not correct \n" + voteMap);
+                            return false;
+                        }
+                    }
+
+
+                    System.out.println("voter already voted, changing its vote");
+                    System.out.println("Adding \n" + totalVote + "\n" + voteMap);
+                    System.out.println("Removing \n" + personalVotes.get(studentNumber));
+                    for (Map.Entry<Integer, Integer> entry : voteMap.entrySet()) {
+                        int key = entry.getKey();
+
+                        totalVote.put(key, totalVote.get(key) + voteMap.get(key) - personalVotes.get(studentNumber).get(key));
+
+                    }
+                    System.out.println("Total : \n" + totalVote);
+                    personalVotes.put(studentNumber, voteMap);  //replaces personnal vote with new vote
+                    return true;
+                }
+            }
             System.out.println("Voter cannot vote");
             return false;
         }
+
+
         if (voteMap.size() == totalVote.size()) {   //vérifie que la map envoyée a autant d'entrées que de candidats
             System.out.println("Checking if it is correct");
             for (Map.Entry<Integer, Integer> entry : voteMap.entrySet()) {
@@ -70,12 +104,16 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
                     return false;
                 }
             }
+
+
             System.out.println("Adding \n" + totalVote + "\n" + voteMap);
             for (Map.Entry<Integer, Integer> entry : voteMap.entrySet()) {
                 int key = entry.getKey();
 
                 totalVote.put(key, totalVote.get(key) + voteMap.get(key));
+
             }
+            personalVotes.put(studentNumber, voteMap);
                 for (Voter voter: hasNotVotedList){
                     if(voter.getStudentNumber() == studentNumber){
                         hasNotVotedList.remove(voter);
@@ -110,8 +148,11 @@ public class PrivateServer extends UnicastRemoteObject implements DistantPrivate
         this.candidateList = candidateList;
     }
 
-    public void copyVoterList(ArrayList<Voter> voterList) {
-        hasNotVotedList = voterList;
+    public void setVoterList(ArrayList<Voter> voterList) {
+        hasNotVotedList = new ArrayList<>();
+        for (Voter voter : voterList) {
+            hasNotVotedList.add(voter);
+        }
         for(Voter voter: hasNotVotedList){
             System.out.println(voter.getStudentNumber());
         }

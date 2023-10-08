@@ -1,17 +1,40 @@
 package Contract;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class Voter implements Serializable {
 
     private int studentNumber;
     private String password;
+    Map<Integer, Integer> voteMap;
 
+
+    public Map<Integer, Integer> getVoteMap() {
+        return voteMap;
+    }
+
+    public void setVoteMap(Map<Integer, Integer> voteMap) {
+        this.voteMap = voteMap;
+    }
 
     public Voter(int studentNumber, String password) {
         this.studentNumber = studentNumber;
         this.password = password;
+        voteMap= new HashMap<>();
+        for (int i = 0; i <= 3; i++) {
+            voteMap.put(i, 0);
+        }
+    }
+
+    public void vote(int rank, int voteValue) {
+        if (voteMap.containsKey(rank) && (voteValue >= 0 && voteValue <= 3)) {
+            voteMap.put(rank, voteValue);
+        } else {
+            System.out.println("Invalid vote value");
+        }
     }
 
     public int getStudentNumber() {

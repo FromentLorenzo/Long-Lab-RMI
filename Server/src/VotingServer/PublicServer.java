@@ -9,11 +9,11 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PublicServer extends UnicastRemoteObject implements DistantPublic {
+
 
 
     ArrayList<Voter> voterList;
@@ -35,8 +35,8 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
         voterList.add(new Voter(5, "E"));
         voterList.add(new Voter(6, "F"));
         voterList.add(new Voter(7, "G"));*/
-        privateServer.copyVoterList(voterList);
 
+        privateServer.setVoterList(voterList);
 
 
     }
@@ -67,8 +67,7 @@ public class PublicServer extends UnicastRemoteObject implements DistantPublic {
 
     @Override
     public boolean checkCanVote(int studentNumber) throws RemoteException{
-        ArrayList<Voter> hasNotVotedList=privateServer.getHasNotVotedList();
-        for(Voter voter:hasNotVotedList){
+        for(Voter voter:voterList){
             if (voter.getStudentNumber()==studentNumber){
                 return true;
             }

@@ -42,10 +42,8 @@ public class Candidate implements Serializable {
 
     @Override
     public String toString() {
-        return "Candidate{" +
-                "rank=" + rank +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+        return  "numéro=" + rank +
+                ": " + firstName +
+                " " + lastName;
     }
 }
